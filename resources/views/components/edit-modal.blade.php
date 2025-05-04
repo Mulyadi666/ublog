@@ -1,9 +1,10 @@
 <div 
-    x-data="editModal()"
-    x-cloak
-    x-show="open"
-    x-transition.opacity
-    class="fixed inset-0 flex items-center justify-center z-50"
+  x-data="editModal()"
+  x-cloak
+  x-show="open"
+  x-transition.opacity
+  class="fixed inset-0 flex items-center justify-center z-50"
+  @open-edit-modal.window="openModal($event.detail)"
 >
   <div class="absolute inset-0 bg-black opacity-50" @click="closeModal()"></div>
   <div class="bg-white rounded-lg shadow-lg z-10 p-6 w-11/12 md:w-1/2" @click.outside="closeModal()">
@@ -37,51 +38,50 @@
 </div>
 
 <script>
-function editModal() {
-  return {
-    open: false,
-    postId: null,
-    postTitle: '',
-    postAuthor: '',
-    postContent: '',
-    openModal(data) {
-      this.postId      = data.id;
-      this.postTitle   = data.title;
-      this.postAuthor  = data.author;
-      this.postContent = data.content;
-      this.open        = true;
-    },
-    closeModal() {
-      this.open = false;
-    },
-    submit() {
-      fetch(`/posts/${this.postId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        },
-        body: JSON.stringify({
-          title: this.postTitle,
-          author: this.postAuthor,
-          content: this.postContent,
+  function editModal() {
+    return {
+      open: false,
+      postId: null,
+      postTitle: '',
+      postAuthor: '',
+      postContent: '',
+
+      // terpanggil oleh @open-edit-modal.window
+      openModal(detail) {
+        this.postId      = detail.id;
+        this.postTitle   = detail.title;
+        this.postAuthor  = detail.author;
+        this.postContent = detail.content;
+        this.open        = true;
+      },
+
+      closeModal() {
+        this.open = false;
+      },
+
+      submit() {
+        fetch(`/posts/${this.postId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+          },
+          body: JSON.stringify({
+            title: this.postTitle,
+            author: this.postAuthor,
+            content: this.postContent,
+          })
         })
-      })
-      .then(res => res.json())
-      .then(res => {
-        if (res.success) {
-          // contoh: reload halaman atau update DOM secara dinamis
-          window.location.reload();
-        } else {
-          alert('Gagal mengupdate');
-        }
-      });
+        .then(res => res.json())
+        .then(res => {
+          if (res.success) {
+            this.closeModal();
+            window.location.reload();
+          } else {
+            alert('Gagal mengupdate');
+          }
+        });
+      }
     }
   }
-}
-
-// Dengarkan event untuk buka modal
-window.addEventListener('open-edit-modal', e => {
-  document.querySelector('[x-data="editModal()"]').__x.$data.openModal(e.detail);
-});
 </script>

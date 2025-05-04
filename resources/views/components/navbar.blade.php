@@ -61,6 +61,9 @@
                   <li>
                     <form method="POST" action="{{ route('logout') }}">
                       @csrf
+                      <button type="Arsip " class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200">
+                        Arsip
+                      </button>
                       <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200">
                         Logout
                       </button>

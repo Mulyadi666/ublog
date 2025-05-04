@@ -37,7 +37,6 @@ class PostController extends Controller
         return response()->json($post);
     }
 
-    // Proses update
     public function update(Request $request, $id)
     {
         $data = $request->validate([
@@ -45,15 +44,16 @@ class PostController extends Controller
             'author'  => 'required|string|max:255',
             'content' => 'required',
         ]);
-
+    
         Post::findOrFail($id)->update($data);
-
+    
+        // Kembalikan JSON success
         return response()->json([
             'success' => true,
-            'message' => 'Postingan berhasil diupdate',
-            'post'    => $data
+            'post'    => Post::find($id),
         ]);
     }
+    
 
     
         // Untuk menghapus post

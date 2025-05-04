@@ -12,37 +12,21 @@
 
         @auth
           <div class="absolute bottom-4 right-4 flex space-x-3">
-            {{-- <a href="{{ route('posts.edit', $post->id) }}" class="text-blue-500 hover:text-blue-700" title="Edit">
-              <i class="fas fa-edit"></i>
-            </a> --}}
-            {{-- <a href="#"
-              @click.prevent="
-                fetch(`/posts/{{ $post->id }}/edit`)
-                  .then(res => res.json())
-                  .then(data => window.dispatchEvent(
-                    new CustomEvent('open-edit-modal', { detail: data })
-                  ))
-              "
-              class="text-blue-500 hover:text-blue-700"
-              title="Edit">
-              <i class="fas fa-edit"></i>
-            </a> --}}
             <button
-  @click.prevent="
-    fetch(`/posts/{{ $post->id }}/edit`)
-      .then(res => res.json())
-      .then(data => window.dispatchEvent(
-        new CustomEvent('open-edit-modal', { detail: data })
-      ))
-  "
-  class="text-blue-500 hover:text-blue-700"
-  title="Edit"
->
-  <i class="fas fa-edit"></i>
-</button>
-
-
-
+            type="button"
+            @click.prevent="
+              fetch(`/posts/{{ $post->id }}/edit`)
+                .then(res => res.json())
+                .then(data => window.dispatchEvent(
+                  new CustomEvent('open-edit-modal', { detail: data })
+                ))
+            "
+            class="text-blue-500 hover:text-blue-700 focus:outline-none"
+            title="Edit"
+          >
+            <i class="fas fa-edit"></i>
+          </button>
+          
             <form action="{{ route('posts.destroy', $post->id) }}" method="POST" class="inline">
               @csrf
               @method('DELETE')
