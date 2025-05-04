@@ -19,13 +19,13 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email'    => ['required','email'],
+            'email'    => ['required', 'email'],
             'password' => ['required'],
         ]);
 
         if (Auth::attempt($credentials, $request->has('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended('/dashboard'); // ganti dengan route tujuan setelah login
+            return redirect()->intended('/'); // sesuaikan
         }
 
         return back()->withErrors([
@@ -43,9 +43,10 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $data = $request->validate([
-            'name'     => ['required','string','max:255'],
-            'email'    => ['required','email','max:255','unique:users'],
-            'password' => ['required','confirmed','min:6'],
+            'name'                  => ['required', 'string', 'max:255'],
+            'email'                 => ['required', 'email', 'max:255', 'unique:users'],
+            'password'              => ['required', 'confirmed', 'min:6'],
+            'terms'                 => ['accepted'],
         ]);
 
         $user = User::create([
@@ -55,15 +56,16 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect('/dashboard'); // ganti sesuai kebutuhan
+
+        return redirect()->route('login'); // atau ke dashboard
     }
 
-    // Logout
+    // Proses logout
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/'); // ganti ke homepage
+        return redirect()->route('home');
     }
 }
