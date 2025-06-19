@@ -17,9 +17,9 @@
     
     <x-navbar></x-navbar>
     <div x-data> 
-    @auth
+    {{-- @auth
     <p class="text-green-500">User sudah login.</p>
-    @endauth
+    @endauth --}}
     <div class="container mx-auto px-36 py-14 ">
         @include('components.post')
         <div x-data>
