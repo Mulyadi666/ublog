@@ -1,4 +1,4 @@
-<nav class="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+<nav id="navbar" class="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700 fixed top-0 left-0 w-full z-50 transition-transform duration-300">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
 
     {{-- Logo selalu tampil --}}
