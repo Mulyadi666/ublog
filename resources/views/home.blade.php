@@ -14,16 +14,31 @@
         </style>
     </head>
     <body class="bg-gray-50 dark:bg-gray-800">
-        <x-navbar></x-navbar>
-        <div x-data> 
-        {{-- @auth
-        <p class="text-green-500">User sudah login.</p>
-        @endauth --}}
-        <div class="container mx-auto px-36 py-14 ">
-            @include('components.post')
-            <div x-data>
-                <x-list-post :posts="$posts" />
-                @include('components.edit-modal')
+        <div 
+            x-data="{
+                lastScroll: 0,
+                showNavbar: true,
+                handleScroll() {
+                    let current = window.pageYOffset
+                    this.showNavbar = current < this.lastScroll || current <= 0
+                    this.lastScroll = current
+                }
+            }"
+            x-init="window.addEventListener('scroll', handleScroll)"
+        >
+            <div 
+                x-show="showNavbar" 
+                x-transition.duration.300ms
+                style="position: sticky; top: 0; z-index: 50;"
+            >
+                <x-navbar></x-navbar>
+            </div>
+            <div class="container mx-auto px-36 py-14 ">
+                @include('components.post')
+                <div x-data>
+                    <x-list-post :posts="$posts" />
+                    @include('components.edit-modal')
+                </div>
             </div>
         </div>
     </body>
