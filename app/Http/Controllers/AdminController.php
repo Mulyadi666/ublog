@@ -68,7 +68,7 @@ class AdminController extends Controller
     {
         $posts = Post::with('user')->get();
 
-        $pdf = Pdf::loadView('admin_posts_pdf', compact('posts'));
+        $pdf = Pdf::loadView('exports.admin_posts_pdf', compact('posts'));
         return $pdf->download('Semua Postingan-' . date('Y-m-d') . '.pdf');
     }
 }

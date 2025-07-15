@@ -1,33 +1,35 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Post;
+use Illuminate\Http\Request;
 
 class PostApiController extends Controller
 {
-    // Ambil semua postingan
-    public function index()
+   public function index()
     {
-        return response()->json(Post::latest()->get(), 200);
+        $posts = Post::where('is_archived', false)->latest()->get(['id', 'title', 'author', 'content', 'created_at', 'user_id']);
+        return response()->json($posts);
     }
 
-    // Simpan postingan baru
+    public function show($id)
+    {
+        $post = Post::with('user')->findOrFail($id);
+        return response()->json($post);
+    }
+
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $data = $request->validate([
             'title' => 'required|string|max:255',
-            'author' => 'required|string|max:100',
-            'content' => 'required|string',
+            'author' => 'required|string|max:255',
+            'content' => 'required',
         ]);
 
-        $post = Post::create($validated);
+        $data['user_id'] = auth()->id();
+        $post = Post::create($data);
 
-        return response()->json([
-            'message' => 'Postingan berhasil disimpan',
-            'data' => $post
-        ], 201);
+        return response()->json($post, 201);
     }
 }

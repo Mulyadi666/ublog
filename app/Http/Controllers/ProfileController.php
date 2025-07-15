@@ -31,7 +31,7 @@ class ProfileController extends Controller
             return redirect()->back()->with('error', 'Tidak ada postingan untuk diekspor.');
         }
 
-        $pdf = Pdf::loadView('posts_pdf', compact('posts'))->setPaper('a4', 'portrait');
+        $pdf = Pdf::loadView('exports.posts_pdf', compact('posts'))->setPaper('a4', 'portrait');
         return $pdf->download('list-postingan-' . now()->format('Y-m-d') . '.pdf');
     }
 
